@@ -12,6 +12,13 @@
   </head>
   <body>
 
+    <header>
+      <% if Helpers.logged_in?(session) %>
+        <form method="post" action="/logout" >
+          <input type="submit" value="Logout">
+        </form>
+      <% end %>
+    </header>
     <div class="container">
       <%= yield %>
     </div>

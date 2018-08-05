@@ -1,11 +1,11 @@
 class UsersController < ApplicationController
-  configure do
-    enable :sessions
-    set :session_secret, "fuwafuwa"
-  end
-
   get '/signup' do
-    erb :'registration/signup'
+    if !Helpers.logged_in?(session)
+      erb :'registration/signup'
+    else
+      @user = Helpers.current_user(session)
+      redirect to "/tweets"
+    end
   end
 
   post '/signup' do
@@ -15,16 +15,33 @@ class UsersController < ApplicationController
     @user.password = params[:password]
     @user.save
 
-    session[:id] = @user.id
+    if @user.save
+      session[:user_id] = @user.id
+      redirect to '/tweets'
+    else
+      redirect to '/signup'
+    end
+  end
 
-    redirect to "users/#{@user.slug}"
+  get '/login' do
+    erb :'sessions/login'
+  end
+
+  post '/login' do
+
+  end
+
+  post '/logout' do
+    session.clear
+    redirect to '/'
   end
 
   get '/users/:slug' do
-    @user = User.find_by(id: session[:id])
+    @user = User.find_by(id: session[:user_id])
 
     erb :'users/show'
   end
 
-  
+
+
 end
