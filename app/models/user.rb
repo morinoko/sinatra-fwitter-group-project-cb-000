@@ -2,8 +2,13 @@ class User < ActiveRecord::Base
   has_secure_password
   has_many :tweets
 
+  before_save do |user|
+    self.username.downcase!
+    self.email.downcase!
+  end
+
   def slug
-    self.username.downcase.gsub(" ", "-")
+    self.username.gsub(" ", "-")
   end
 
   def self.find_by_slug(slug)
