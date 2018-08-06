@@ -24,11 +24,23 @@ class UsersController < ApplicationController
   end
 
   get '/login' do
-    erb :'sessions/login'
+    if !Helpers.logged_in?(session)
+      erb :'sessions/login'
+    else
+      redirect to '/tweets'
+    end
   end
 
   post '/login' do
+    @user = User.find_by(username: params[:username])
 
+    if @user && @user.authenticate(params[:password])
+      session[:user_id] = @user.id
+      
+      redirect to '/tweets'
+    else
+      redirect to '/login'
+    end
   end
 
   post '/logout' do
@@ -41,7 +53,4 @@ class UsersController < ApplicationController
 
     erb :'users/show'
   end
-
-
-
 end
