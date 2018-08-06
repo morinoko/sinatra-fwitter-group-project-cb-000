@@ -36,7 +36,8 @@ class UsersController < ApplicationController
 
     if @user && @user.authenticate(params[:password])
       session[:user_id] = @user.id
-      
+      flash[:notice] = "Welcome, #{@user.username}"
+
       redirect to '/tweets'
     else
       redirect to '/login'
