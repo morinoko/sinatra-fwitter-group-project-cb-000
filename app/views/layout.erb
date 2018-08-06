@@ -14,12 +14,16 @@
 
     <header>
       <% if Helpers.logged_in?(session) %>
-        <form method="post" action="/logout" >
-          <input type="submit" value="Logout">
-        </form>
+        <a href="/logout">Logout</a>
       <% end %>
     </header>
     <div class="container">
+      <% if flash.has?(:notice) %>
+        <div class="alert alert-info" role="alert">
+          <%= flash[:notice] %>
+        </div>
+      <% end %>
+
       <%= yield %>
     </div>
 
