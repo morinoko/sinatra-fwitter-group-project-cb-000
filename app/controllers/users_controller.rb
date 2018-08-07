@@ -19,6 +19,7 @@ class UsersController < ApplicationController
       session[:user_id] = @user.id
       redirect to '/tweets'
     else
+      flash[:notice] = "Please fill in all the fields."
       redirect to '/signup'
     end
   end
@@ -40,6 +41,7 @@ class UsersController < ApplicationController
 
       redirect to '/tweets'
     else
+      flash[:notice] = "Username or Password was incorrect!"
       redirect to '/login'
     end
   end
