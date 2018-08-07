@@ -38,4 +38,9 @@ class TweetsController < ApplicationController
     redirect to '/tweets'
   end
 
+  get '/tweets/:id' do
+    @tweet = Tweet.find_by(id: params[:id])
+    erb :'tweets/show'
+  end
+
 end
