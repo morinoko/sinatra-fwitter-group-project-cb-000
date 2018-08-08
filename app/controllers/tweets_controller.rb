@@ -48,7 +48,7 @@ class TweetsController < ApplicationController
   end
 
   post '/tweets/:id' do
-    @tweet = Tweet.find_by(params[:id])
+    @tweet = Tweet.find_by(id: params[:id])
 
     if params[:content].empty?
       flash[:notice] = "Your tweet cannot be blank!"
@@ -59,10 +59,22 @@ class TweetsController < ApplicationController
     redirect to "/tweets/#{@tweet.id}"
   end
 
+  delete '/tweets/:id' do
+    @tweet = Tweet.find_by(id: params[:id])
+
+    if Helpers.current_user(session) != @tweet.user
+      flash[:notice] = "You can only delete your own tweets!"
+    else
+      @tweet.delete
+    end
+    
+    redirect to '/tweets'
+  end
+
   get '/tweets/:id/edit' do
     if Helpers.logged_in?(session)
       @user = Helpers.current_user(session)
-      @tweet = Tweet.find_by(params[:id])
+      @tweet = Tweet.find_by(id: params[:id])
 
       if @tweet.user == @user
         @tweet = Tweet.find_by(id: params[:id])
