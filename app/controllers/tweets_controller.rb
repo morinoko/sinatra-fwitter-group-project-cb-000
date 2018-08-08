@@ -47,7 +47,7 @@ class TweetsController < ApplicationController
     end
   end
 
-  post '/tweets/:id' do
+  patch '/tweets/:id' do
     @tweet = Tweet.find_by(id: params[:id])
 
     if params[:content].empty?
@@ -67,7 +67,7 @@ class TweetsController < ApplicationController
     else
       @tweet.delete
     end
-    
+
     redirect to '/tweets'
   end
 
