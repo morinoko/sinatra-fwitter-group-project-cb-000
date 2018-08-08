@@ -48,6 +48,14 @@ class TweetsController < ApplicationController
 
   post '/tweets/:id' do
     @tweet = Tweet.find_by(params[:id])
+
+    if params[:content].empty?
+      flash[:notice] = "Your tweet cannot be blank!"
+      redirect to "/tweets/#{@tweet.id}/edit"
+    end
+
+    @tweet.update(content: params[:content])
+    redirect to "/tweets/#{@tweet.id}"
   end
 
   get '/tweets/:id/edit' do
