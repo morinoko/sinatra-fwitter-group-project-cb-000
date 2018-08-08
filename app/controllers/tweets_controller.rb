@@ -30,10 +30,8 @@ class TweetsController < ApplicationController
       redirect to '/tweets/new'
     end
 
-    @tweet.user_id = @user.id
+    @tweet.user = @user
     @tweet.save
-
-    @user.tweets << @tweet
 
     redirect to '/tweets'
   end
@@ -44,6 +42,28 @@ class TweetsController < ApplicationController
       erb :'tweets/show'
     else
       flash[:notice] = "You need to login to see this tweet!"
+      redirect to '/login'
+    end
+  end
+
+  post '/tweets/:id' do
+    @tweet = Tweet.find_by(params[:id])
+  end
+
+  get '/tweets/:id/edit' do
+    if Helpers.logged_in?(session)
+      @user = Helpers.current_user(session)
+      @tweet = Tweet.find_by(params[:id])
+
+      if @tweet.user == @user
+        @tweet = Tweet.find_by(id: params[:id])
+        erb :'tweets/edit'
+      else
+        flash[:notice] = "You can only edit your own tweets."
+        redirect to '/tweets'
+      end
+    else
+      flash[:notice] = "You need to login to edit tweets!"
       redirect to '/login'
     end
   end
