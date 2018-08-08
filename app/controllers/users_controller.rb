@@ -13,7 +13,6 @@ class UsersController < ApplicationController
     @user.username = params[:username]
     @user.email = params[:email]
     @user.password = params[:password]
-    @user.save
 
     if @user.save
       session[:user_id] = @user.id
@@ -25,11 +24,11 @@ class UsersController < ApplicationController
   end
 
   get '/login' do
-    if !Helpers.logged_in?(session)
-      erb :'sessions/login'
-    else
+    if Helpers.logged_in?(session)
       redirect to '/tweets'
     end
+
+    erb :'sessions/login'
   end
 
   post '/login' do
@@ -60,7 +59,7 @@ class UsersController < ApplicationController
   end
 
   get '/users/:slug' do
-    @user = User.find_by(id: session[:user_id])
+    @user = User.find_by_slug(params[:slug])
 
     erb :'users/show'
   end
