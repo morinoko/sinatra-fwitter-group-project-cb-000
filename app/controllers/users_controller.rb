@@ -45,17 +45,14 @@ class UsersController < ApplicationController
     end
   end
 
-  get '/logout' do
-    if Helpers.logged_in?(session)
-      erb :'sessions/logout'
-    else
-      redirect to '/login'
-    end
-  end
-
   post '/logout' do
-    session.clear
-    redirect to '/login'
+    if Helpers.logged_in?(session)
+      session.clear
+    
+      redirect to '/login'
+    else
+      redirect to '/'
+    end
   end
 
   get '/users/:slug' do
