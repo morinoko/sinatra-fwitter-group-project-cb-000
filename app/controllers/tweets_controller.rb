@@ -1,8 +1,8 @@
 class TweetsController < ApplicationController
-  get '/tweets' do
 
-    if Helpers.logged_in?(session)
-      @user = Helpers.current_user(session)
+  get '/tweets' do
+    if logged_in?
+      @user = current_user
       @tweets = Tweet.all
 
       erb :'/tweets/index'
@@ -13,7 +13,7 @@ class TweetsController < ApplicationController
   end
 
   get '/tweets/new' do
-    if Helpers.logged_in?(session)
+    if logged_in?
       erb :'tweets/new'
     else
       flash[:notice] = "You need to be logged in to make a tweet!"
@@ -22,7 +22,7 @@ class TweetsController < ApplicationController
   end
 
   post '/tweets' do
-    @user = Helpers.current_user(session)
+    @user = current_user
     @tweet = Tweet.new
     @tweet.content = params[:content]
 
@@ -38,7 +38,7 @@ class TweetsController < ApplicationController
   end
 
   get '/tweets/:id' do
-    if Helpers.logged_in?(session)
+    if logged_in?
       @tweet = Tweet.find_by(id: params[:id])
       erb :'tweets/show'
     else
@@ -62,7 +62,7 @@ class TweetsController < ApplicationController
   delete '/tweets/:id' do
     @tweet = Tweet.find_by(id: params[:id])
 
-    if Helpers.current_user(session) != @tweet.user
+    if current_user != @tweet.user
       flash[:notice] = "You can only delete your own tweets!"
     else
       @tweet.delete
@@ -72,8 +72,8 @@ class TweetsController < ApplicationController
   end
 
   get '/tweets/:id/edit' do
-    if Helpers.logged_in?(session)
-      @user = Helpers.current_user(session)
+    if logged_in?
+      @user = current_user
       @tweet = Tweet.find_by(id: params[:id])
 
       if @tweet.user == @user

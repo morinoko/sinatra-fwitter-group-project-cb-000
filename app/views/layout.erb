@@ -21,8 +21,8 @@
           </button>
           <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
             <div class="navbar-nav">
-              <% if Helpers.logged_in?(session) %>
-                <% user = Helpers.current_user(session) %>
+              <% if logged_in? %>
+                <% user = current_user %>
                 <a class="nav-item nav-link" href="/users/<%= user.slug %>">My Page</a>
                 <a class="nav-item nav-link" href="/tweets/new">New Tweet</a>
                 <a class="btn btn-outline-danger" href="/logout">Logout</a>

@@ -1,9 +1,9 @@
 class UsersController < ApplicationController
   get '/signup' do
-    if !Helpers.logged_in?(session)
+    if !logged_in?
       erb :'registration/signup'
     else
-      @user = Helpers.current_user(session)
+      @user = current_user
       redirect to "/tweets"
     end
   end
@@ -24,7 +24,7 @@ class UsersController < ApplicationController
   end
 
   get '/login' do
-    if Helpers.logged_in?(session)
+    if logged_in?
       redirect to '/tweets'
     end
 
@@ -46,7 +46,7 @@ class UsersController < ApplicationController
   end
 
   get '/logout' do
-    if Helpers.logged_in?(session)
+    if logged_in?
       session.clear
       redirect to '/login'
     else

@@ -1,6 +1,6 @@
 <p><%= @tweet.content %></p>
 
-<% if Helpers.current_user(session) == @tweet.user %>
+<% if current_user == @tweet.user %>
   <a href="/tweets/<%= @tweet.id %>/edit" class="btn btn-primary">Edit Tweet</a>
 
   <form action="/tweets/<%= @tweet.id %>" method="post">
