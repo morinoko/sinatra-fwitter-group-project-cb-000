@@ -2,9 +2,7 @@ class TweetsController < ApplicationController
 
   get '/tweets' do
     if logged_in?
-      @user = current_user
       @tweets = Tweet.all
-
       erb :'/tweets/index'
     else
       flash[:notice] = 'You need to be logged in to view tweets!'
@@ -22,19 +20,24 @@ class TweetsController < ApplicationController
   end
 
   post '/tweets' do
-    @user = current_user
-    @tweet = Tweet.new
-    @tweet.content = params[:content]
+    if logged_in?
+      @user = current_user
+      @tweet = Tweet.new
+      @tweet.content = params[:content]
 
-    if @tweet.content.empty?
-      flash[:notice] = "You cannot have a blank tweet!"
-      redirect to '/tweets/new'
+      if @tweet.content.empty?
+        flash[:notice] = "You cannot have a blank tweet!"
+        redirect to '/tweets/new'
+      end
+
+      @tweet.user = @user
+      @tweet.save
+
+      redirect to '/tweets'
+    else
+      flash[:notice] = "You need to login to do that!"
+      redirect to '/login'
     end
-
-    @tweet.user = @user
-    @tweet.save
-
-    redirect to '/tweets'
   end
 
   get '/tweets/:id' do
@@ -73,11 +76,9 @@ class TweetsController < ApplicationController
 
   get '/tweets/:id/edit' do
     if logged_in?
-      @user = current_user
       @tweet = Tweet.find_by(id: params[:id])
 
-      if @tweet.user == @user
-        @tweet = Tweet.find_by(id: params[:id])
+      if @tweet.user == current_user
         erb :'tweets/edit'
       else
         flash[:notice] = "You can only edit your own tweets."
