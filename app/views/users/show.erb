@@ -1,4 +1,7 @@
 <h1><%= @user.username %>'s Home Page</h1>
-<% @user.tweets.each do |tweet| %>
-  <p><a href="/tweets/<%= tweet.id %>"><%= tweet.content %></a></p>
-<% end %>
+<% if @user.tweets.count > 0 %>
+  <% @user.tweets.each do |tweet| %>
+    <p><a href="/tweets/<%= tweet.id %>"><%= tweet.content %></a></p>
+  <% end %>
+<% else %>
+  <p>You don't have any tweets yet! Go <a href="/tweets/new">make one</a> now!</p>
