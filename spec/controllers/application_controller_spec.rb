@@ -110,12 +110,12 @@ describe ApplicationController do
         :password => "kittens"
       }
       post '/login', params
-      post '/logout' # was get, but I think this should be post
+      get '/logout'
       expect(last_response.location).to include("/login")
     end
 
     it 'does not let a user logout if not logged in' do
-      post '/logout'  # was get, but I think this should be post
+      get '/logout'
       expect(last_response.location).to include("/")
     end
 
@@ -397,9 +397,9 @@ describe ApplicationController do
         fill_in(:password, :with => "kittens")
         click_button 'submit'
         visit "tweets/#{tweet2.id}"
-        
+
         expect(page.body).to_not include("Delete Tweet")
-        
+
         # Previous Test below for reference: changed because I don't think page should include the Delete button at all
         # ------
         #click_button "Delete Tweet"

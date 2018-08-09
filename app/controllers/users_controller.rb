@@ -45,10 +45,9 @@ class UsersController < ApplicationController
     end
   end
 
-  post '/logout' do
+  get '/logout' do
     if Helpers.logged_in?(session)
       session.clear
-    
       redirect to '/login'
     else
       redirect to '/'
