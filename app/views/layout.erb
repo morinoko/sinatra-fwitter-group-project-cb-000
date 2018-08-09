@@ -13,13 +13,30 @@
   <body>
 
     <header>
-      <% if Helpers.logged_in?(session) %>
-        <form method="post" action="/logout">
-          <input type="submit" id="logout" value="Logout">
-        </form>
-        <a href="/tweets/new">New Tweet</a>
-      <% end %>
+      <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="container">
+          <a class="navbar-brand" href="/">Fwitter</a>
+          <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+            <div class="navbar-nav">
+              <% if Helpers.logged_in?(session) %>
+                <% user = Helpers.current_user(session) %>
+                <a class="nav-item nav-link" href="/users/<%= user.slug %>">My Page</a>
+                <a class="nav-item nav-link" href="/tweets/new">New Tweet</a>
+              <% end %>
+            </div>
+            <% if Helpers.logged_in?(session) %>
+              <form class="form-inline" method="post" action="/logout">
+                <input type="submit" class="btn btn-sm btn-outline-danger" id="logout" value="Logout">
+              </form>
+            <% end %>
+          </div>
+        </div>
+      </nav>
     </header>
+    
     <div class="container">
       <div class="row justify-content-center">
         <div class="col-6">
